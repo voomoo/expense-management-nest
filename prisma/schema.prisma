@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  name        String
+  email       String  @unique
+  hash        String
+  balance     Int     @default(0)
+  avatar      String?
+  first_login Boolean @default(false)
+
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  Session         Session[]
+  Expense         Expense[]
+  ExpenseCategory ExpenseCategory[]
+  Income          Income[]
+  IncomeSource    IncomeSource[]
+
+  @@map("users")
+}
+
+model Session {
+  id Int @id @default(autoincrement())
+
+  logged_in_at  DateTime?
+  logged_out_at DateTime?
+  created_at    DateTime  @default(now())
+
+  user_id Int
+  user    User @relation(fields: [user_id], references: [id])
+
+  @@map("sessions")
+}
+
+model Expense {
+  id Int @id @default(autoincrement())
+
+  title   String
+  amount  Int      @default(0)
+  details String?
+  date    DateTime @default(now())
+
+  expense_category_id Int
+  expense_category    ExpenseCategory @relation(fields: [expense_category_id], references: [id])
+
+  created_by Int
+  user       User @relation(fields: [created_by], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("expenses")
+}
+
+model ExpenseCategory {
+  id Int @id @default(autoincrement())
+
+  name          String
+  description   String?
+  category_icon String?
+
+  created_by Int
+  user       User @relation(fields: [created_by], references: [id])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Expense    Expense[]
+
+  @@map("expense_categories")
+}
+
+model Income {
+  id Int @id @default(autoincrement())
+
+  title   String
+  amount  Int      @default(0)
+  details String?
+  date    DateTime @default(now())
+
+  income_source_id Int
+  income_source    IncomeSource @relation(fields: [income_source_id], references: [id])
+
+  created_by Int
+  user       User @relation(fields: [created_by], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("incomes")
+}
+
+model IncomeSource {
+  id Int @id @default(autoincrement())
+
+  name        String
+  description String?
+  source_icon String?
+
+  created_by Int
+  user       User @relation(fields: [created_by], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Income     Income[]
+
+  @@map("income_sources")
+}
