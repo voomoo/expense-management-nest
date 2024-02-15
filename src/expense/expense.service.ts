@@ -191,7 +191,5 @@ export class ExpenseService {
       payload: deletedExpense,
       errors: null,
     };
-
-    return 'delete expense by id';
   }
 }
