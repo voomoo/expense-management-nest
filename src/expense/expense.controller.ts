@@ -36,7 +36,6 @@ export class ExpenseController {
     @Query('page') page = 1,
     @Query('per_page') perPage = 10,
   ) {
-    console.log(page, perPage);
     return this.expense.getAllExpenses(user, page, perPage);
   }
 
