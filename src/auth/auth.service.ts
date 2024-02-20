@@ -45,7 +45,7 @@ export class AuthService {
           throw new ConflictException({
             status: 'FAILED',
             code: HttpStatus.CONFLICT,
-            message: null,
+            message: 'Signup failed, email already taken',
             payload: null,
             errors: [
               {
@@ -94,7 +94,7 @@ export class AuthService {
         status: 'FAILED',
         payload: null,
         code: HttpStatus.FORBIDDEN,
-        message: null,
+        message: 'Credentials wrong',
         errors: [
           {
             title: 'Credentials wrong',

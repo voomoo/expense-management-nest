@@ -7,9 +7,14 @@ import {
   ValidationPipe,
   VersioningType,
 } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.useStaticAssets('uploads', {
+    prefix: '/uploads',
+  });
 
   // versioning
   app.enableVersioning({
